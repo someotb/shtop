@@ -1,5 +1,4 @@
 #include "proc_parse.hpp"
-#include "common.hpp"
 
 #include <cctype>
 #include <iostream>
@@ -27,7 +26,7 @@ std::string get_pid_name(const int pid, const std::filesystem::path &p)
     return field_real_name;
 }
 
-void mem_info()
+void mem_info(Common &common)
 {
     std::ifstream mem("/proc/meminfo");
 
@@ -37,6 +36,7 @@ void mem_info()
     std::string line;
     long int memtotal = 0;
     long int memfree = 0;
+    Memory memory;
 
     while (std::getline(mem, line))
     {
@@ -45,26 +45,18 @@ void mem_info()
         std::istringstream stream(line);
         stream >> name >> val;
         if (name == "MemTotal:")
-        {
-            std::cout << name << val << std::endl;
-            memtotal = val;
-        }
+            memory._memtotal = val;
         if (name == "MemFree:")
-        {
-            std::cout << name << val << std::endl;
-            memfree = val;
-        }
-
+            memory._memfree = val;
         if (memtotal && memfree)
             break;
     }
 
-    std::cout << "MemUsed:" << memtotal - memfree << std::endl;
+    memory._memused =  memtotal - memfree;
 }
 
-void pid_info()
+void pid_info(Common &common)
 {
-    std::vector<Process> processes;
     std::filesystem::path proc("/proc");
     if (!std::filesystem::exists(proc) || !std::filesystem::is_directory(proc))
         throw std::runtime_error("func(pid_info) /proc unavailable");
@@ -78,10 +70,15 @@ void pid_info()
             p._pid = std::stoi(name);
             p._name = get_pid_name(p._pid, proc);
             if (p._name.empty()) continue;
-            processes.push_back(p);
+            common.p.push_back(p);
         }
     }
 
-    for (const auto &p : processes)
+    for (const auto &p : common.p)
         std::cout << "PID: " << p._pid << " | NAME: " << p._name << "\n";
+}
+
+void cpu_info()
+{
+
 }

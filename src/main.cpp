@@ -2,8 +2,10 @@
 
 int main()
 {
-    mem_info();
-    pid_info();
+    Common comon;
+
+    mem_info(comon);
+    pid_info(comon);
 
     return 0;
 }
