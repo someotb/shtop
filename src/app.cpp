@@ -14,7 +14,7 @@ void run_app(Common &common)
         mvprintw(0, 0, "CPU INFO");
         mvprintw(1, 0, "CPU name: %s", common.c.back()._name.c_str());
         mvprintw(2, 0, "CPU usage: %.2f", common.c.back()._usage);
-        mvprintw(4, 0, "Press Ctrl+Q to quit shtop");
+        mvprintw(4, 0, "Press Q to quit shtop");
         refresh();
         int ch = getch();
         flushinp();
