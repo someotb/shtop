@@ -120,3 +120,10 @@ void cpu_info(Common &common)
     cpu2._usage = cpu_usage;
     common.c.push_back(cpu2);
 }
+
+void update_stats(Common &common)
+{
+    mem_info(common);
+    pid_info(common);
+    cpu_info(common);
+}

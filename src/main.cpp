@@ -1,16 +1,8 @@
-#include "proc_parse.hpp"
-
-#include <iostream>
+#include "app.hpp"
 
 int main()
 {
-    Common comon;
-
-    mem_info(comon);
-    pid_info(comon);
-    cpu_info(comon);
-
-    std::cout << comon.c.back()._usage << "\n";
-
+    Common common;
+    run_app(common);
     return 0;
 }

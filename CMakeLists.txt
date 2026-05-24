@@ -10,7 +10,9 @@ set(INC_DIR ${PROJECT_SOURCE_DIR}/include)
 
 add_executable(${PROJECT_NAME}
   ${SRC_DIR}/proc_parse.cpp
+  ${SRC_DIR}/app.cpp
   ${SRC_DIR}/main.cpp
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${INC_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE ncurses)
