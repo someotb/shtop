@@ -16,7 +16,7 @@ std::string get_pid_name(const int pid, const std::filesystem::path &p)
     std::ifstream name = pid_name;
 
     if (!name.is_open())
-        throw std::runtime_error("func(get_pid_name): Failed to open file");
+        return "";
 
     std::string line;
     std::string field_name;
@@ -77,6 +77,7 @@ void pid_info()
             Process p;
             p._pid = std::stoi(name);
             p._name = get_pid_name(p._pid, proc);
+            if (p._name.empty()) continue;
             processes.push_back(p);
         }
     }
