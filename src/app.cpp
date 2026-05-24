@@ -2,6 +2,7 @@
 #include "proc_parse.hpp"
 
 #include <ncurses.h>
+#include <ostream>
 #include <thread>
 #include <chrono>
 
@@ -12,12 +13,14 @@ void run_app(Common &common)
     while (true)
     {
         update_stats(common);
+        clear();
         mvprintw(0, 0, "CPU INFO");
         mvprintw(1, 0, "CPU name: %s", common.c.back()._name.c_str());
-        mvprintw(2, 0, "CPU usage: %.1f", common.c.back()._usage);
+        mvprintw(2, 0, "CPU usage: %.2f", common.c.back()._usage);
         refresh();
-        getch();
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        int ch = getch();
+        flushinp();
+        if (ch == 'q') break;
     }
     endwin();
 }
