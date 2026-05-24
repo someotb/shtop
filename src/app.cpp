@@ -2,9 +2,6 @@
 #include "proc_parse.hpp"
 
 #include <ncurses.h>
-#include <ostream>
-#include <thread>
-#include <chrono>
 
 void run_app(Common &common)
 {
