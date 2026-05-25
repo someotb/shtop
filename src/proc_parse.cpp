@@ -38,29 +38,34 @@ void mem_info(Common &common)
         throw std::runtime_error("/proc/meminfo unavailable");
 
     std::string line;
-    long int memtotal = 0;
-    long int memfree = 0;
+    long long memtotal = 0;
+    long long memfree = 0;
     Memory_stats memory;
 
     while (std::getline(mem, line))
     {
         std::string name;
-        long int val;
+        long long val;
         std::istringstream stream(line);
         stream >> name >> val;
         if (name == "MemTotal:")
             memory._memtotal = val;
         if (name == "MemFree:")
             memory._memfree = val;
-        if (memtotal && memfree)
+        if (memory._memtotal && memory._memfree)
             break;
     }
 
-    memory._memused =  memtotal - memfree;
+    memory._memused =  memory._memtotal - memory._memfree;
+    if (common.m.empty())
+        common.m.push_back(memory);
+    else
+        common.m.back() = memory;
 }
 
 void pid_info(Common &common)
 {
+    common.p.clear();
     std::filesystem::path proc("/proc");
     if (!std::filesystem::exists(proc) || !std::filesystem::is_directory(proc))
         throw std::runtime_error("func(pid_info) /proc unavailable");
@@ -118,7 +123,11 @@ void cpu_info(Common &common)
 
     double cpu_usage = (1 - static_cast<double>(delta_idle) / static_cast<double>(delta_total)) * 100;
     cpu2._usage = cpu_usage;
-    common.c.push_back(cpu2);
+
+    if (common.c.empty())
+        common.c.push_back(cpu2);
+    else
+        common.c.back() = cpu2;
 }
 
 void update_stats(Common &common)
